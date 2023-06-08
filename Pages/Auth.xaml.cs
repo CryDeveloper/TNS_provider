@@ -12,21 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TNS__provider_.Classes;
-using TNS__provider_.Pages;
 
-namespace TNS__provider_
+namespace TNS__provider_.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Логика взаимодействия для Auth.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class Auth : Page
     {
-        public MainWindow()
+        public Auth()
         {
             InitializeComponent();
-            GlobalData.ActiveMainFrame = MainWindowFrame;
-            GlobalData.ActiveMainFrame.Navigate(new Auth());
         }
     }
 }
