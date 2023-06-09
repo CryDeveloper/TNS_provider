@@ -5,40 +5,50 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TNS__provider_.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="450" d:DesignWidth="1000"
+      MinHeight="450" MinWidth="600"
       Title="Auth">
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="160"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <TextBlock HorizontalAlignment="Left">Телеком Нева Связь</TextBlock>
-            <Image Source="/Resource/logo_TNS.jpg" Stretch="None" Grid.Column="3" HorizontalAlignment="Right" />
+        <DockPanel Grid.Row="0">
+            <TextBlock 
+                DockPanel.Dock="Left" 
+                VerticalAlignment="Center"
+                Style="{StaticResource Header}">Телеком Нева Связь</TextBlock>
+            <Image DockPanel.Dock="Right" Source="/Resource/logo_TNS.jpg" Stretch="None" HorizontalAlignment="Right" />
+        </DockPanel>
+        <Grid Grid.Row="1">
+            <Grid Grid.Column="1" HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Style="{StaticResource Text}">Номер</TextBlock>
+                    <TextBlock Style="{StaticResource Text}">Пароль</TextBlock>
+                    <TextBlock Style="{StaticResource Text}">Код</TextBlock>
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <TextBox/>
+                    <TextBox/>
+                    <StackPanel Orientation="Horizontal" >
+                        <TextBox/>
+                        <Button Width="30" Height="30" BorderBrush="{x:Null}" Foreground="{x:Null}">
+                            <Button.Background>
+                                <ImageBrush ImageSource="/Resource/update_btn.jpg"/>
+                            </Button.Background>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="Auto" Margin="0,20,0,20">
+                        <Button Content="Отмена" Padding="5" Style="{StaticResource AuthBtn}"/>
+                        <Button Content="Вход" Padding="5" Style="{StaticResource AuthBtn}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
         </Grid>
-        <StackPanel Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
-            <StackPanel Margin="5">
-                <TextBlock HorizontalAlignment="Left">Номер</TextBlock>
-                <TextBlock HorizontalAlignment="Left">Пароль</TextBlock>
-                <TextBlock HorizontalAlignment="Left">Код</TextBlock>
-            </StackPanel>
-            <StackPanel Margin="5">
-                <TextBox Width="200"/>
-                <TextBox Width="200"/>
-                <StackPanel Orientation="Horizontal">
-                    <TextBox Width="150"/>
-                    <Button Width="20" Height="20">
-                        <Button.Background>
-                            <ImageBrush ImageSource="/Resource/update_btn.jpg"/>
-                        </Button.Background>
-                    </Button>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
-                    <Button Margin="5" Content="Отмена" Padding="5"/>
-                    <Button Margin="5" Content="Вход" Padding="5"/>
-                </StackPanel>
-            </StackPanel>
-        </StackPanel>
     </Grid>
 </Page>
