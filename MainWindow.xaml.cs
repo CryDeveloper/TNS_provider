@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TNS__provider_.Classes;
 
 namespace TNS__provider_
 {
@@ -23,6 +24,8 @@ namespace TNS__provider_
         public MainWindow()
         {
             InitializeComponent();
+            GlobalData.ActiveMainFrame = MainWindowFrame;
+            //GlobalData.ActiveMainFrame.Navigate(new Auth());
         }
     }
 }
