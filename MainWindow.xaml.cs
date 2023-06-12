@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TNS__provider_.Classes;
+using TNS__provider_.Pages;
 
 namespace TNS__provider_
 {
@@ -25,7 +26,50 @@ namespace TNS__provider_
         {
             InitializeComponent();
             GlobalData.ActiveMainFrame = MainWindowFrame;
-            //GlobalData.ActiveMainFrame.Navigate(new Auth());
+            HeaderBlock.Text = "Абоненты ТНС";
+            GlobalData.ActiveMainFrame.Navigate(new Abonents());
+        }
+
+        private void btnAbonent_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            HeaderBlock.Text = btn.Content.ToString()+ " ТНС";
+            GlobalData.ActiveMainFrame.Navigate(new Abonents());
+        }
+
+        private void btnManageEqip_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            HeaderBlock.Text = btn.Content.ToString();
+            GlobalData.ActiveMainFrame.Navigate(new Test());
+        }
+
+        private void btnActive_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            HeaderBlock.Text = btn.Content.ToString();
+            GlobalData.ActiveMainFrame.Navigate(new Test());
+        }
+
+        private void btnBilling_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            HeaderBlock.Text = btn.Content.ToString();
+            GlobalData.ActiveMainFrame.Navigate(new Test());
+        }
+
+        private void btnUserSupport_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            HeaderBlock.Text = btn.Content.ToString();
+            GlobalData.ActiveMainFrame.Navigate(new Test());
+        }
+
+        private void btnCRM_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            HeaderBlock.Text = btn.Content.ToString();
+            GlobalData.ActiveMainFrame.Navigate(new Test());
         }
     }
 }

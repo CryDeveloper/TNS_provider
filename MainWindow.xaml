@@ -5,9 +5,43 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TNS__provider_"
         mc:Ignorable="d"
-        Title="Телеком Нева Связь" Height="450" Width="800"
+        Title="Телеком Нева Связь" Height="600" Width="800"
         MinHeight="450" MinWidth="700">
     <Grid>
-        <Frame x:Name="MainWindowFrame" NavigationUIVisibility="Hidden"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="*"/>
+            <!--минимум должен быть 650 у окошка-->
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <Image Source="/Resource/Лого ТНС.jpg" />
+            <Button x:Name="btnAbonent" Content="Абоненты" Click="btnAbonent_Click"/>
+            <Button x:Name="btnManageEqip" Content="Управление оборудованием" Click="btnManageEqip_Click"/>
+            <Button x:Name="btnActive" Content="Активы" Click="btnActive_Click"/>
+            <Button x:Name="btnBilling" Content="Биллинг" Click="btnBilling_Click"/>
+            <Button x:Name="btnUserSupport" Content="Поддержка пользователей" Click="btnUserSupport_Click"/>
+            <Button x:Name="btnCRM" Content="CRM" Click="btnCRM_Click"/>
+            <Button VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,30,5,5" />
+            <Button VerticalAlignment="Bottom" HorizontalAlignment="Center" />
+        </StackPanel>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="130"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <DockPanel Grid.Row="0" LastChildFill="False">
+                <TextBlock 
+                    x:Name="HeaderBlock"
+                    DockPanel.Dock="Left" 
+                    VerticalAlignment="Center"
+                    Style="{StaticResource Header}"/>
+                <Image x:Name="imgUser"
+                       DockPanel.Dock="Right"
+                       Source="/Resource/ID1516.jpg"/>
+                <ComboBox Name="cbUser"
+                     DockPanel.Dock="Right" VerticalAlignment="Center"/>
+            </DockPanel>
+            <Frame x:Name="MainWindowFrame" NavigationUIVisibility="Hidden" Grid.Row="1"/>
+        </Grid>
     </Grid>
 </Window>
