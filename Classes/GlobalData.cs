@@ -10,5 +10,7 @@ namespace TNS__provider_.Classes
     internal class GlobalData
     {
         public static Frame ActiveMainFrame = new Frame();
+
+        public static Users AuthUser;
     }
 }
