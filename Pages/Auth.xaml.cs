@@ -22,17 +22,11 @@ namespace TNS__provider_.Pages
     /// </summary>
     public partial class Auth : Page
     {
-        List<Users> Users = new List<Users>();
-        private Timer _timer = null;
         private string chars = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM[];',./{}:|<>?1234567890!@#$%^&*()_+=-";
         Random random = new Random();
         private string code;
         public Auth()
         {
-            Users user = new Users();
-            user.Number = "1";
-            user.Password = "1";
-            Users.Add(user);
             InitializeComponent();
         }
         /// <summary>
@@ -46,12 +40,17 @@ namespace TNS__provider_.Pages
             Password.Clear();
             Code.Clear();
         }
+        /// <summary>
+        /// Идентификация пользователя при вводе номера.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="k"></param>
         private void Number_KeyUp(object sender, KeyEventArgs k)
         {
             TextBox textBox = sender as TextBox;
             if (textBox.Text != null && k.Key == Key.Enter)
             {
-                GlobalData.AuthUser = Users.FirstOrDefault(x => x.Number == textBox.Text);
+                GlobalData.AuthUser = DbTnsEntities.GetContext().Employees.FirstOrDefault(x => x.Number == textBox.Text);
                 if (GlobalData.AuthUser != null)
                 {
                     Password.IsEnabled = true;
@@ -64,6 +63,11 @@ namespace TNS__provider_.Pages
             }
         }
 
+        /// <summary>
+        /// Аутентификация по паролю.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="k"></param>
         private void Password_KeyUp(object sender, KeyEventArgs k)
         {
             TextBox textBox = sender as TextBox;
@@ -83,6 +87,9 @@ namespace TNS__provider_.Pages
             }
         }
 
+        /// <summary>
+        /// Генерация кода для поля.
+        /// </summary>
         private void GenerateCode()
         {
             Code.Clear();
@@ -91,6 +98,11 @@ namespace TNS__provider_.Pages
             /*я забыла код для таймера*/
         }
 
+        /// <summary>
+        /// Дейтсвие при нажатии enter в поле ввода кода.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Code_KeyUp(object sender, KeyEventArgs e)
         {
             if(e.Key == Key.Enter)
@@ -98,7 +110,7 @@ namespace TNS__provider_.Pages
                 if (code == Code.Text)
                 {
                     /*отключение таймера*/
-                    MessageBox.Show("Вы зашли как (роль пользователя)");
+                    MessageBox.Show($"Ваша роль: {GlobalData.AuthUser.RolesEmployees.NameRole.ToLower()}");
                 }
                 else
                 {
@@ -107,12 +119,17 @@ namespace TNS__provider_.Pages
             }
         }
 
+        /// <summary>
+        /// Действие при нажатии на кнопку "Вход".
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Entry_Click(object sender, RoutedEventArgs e)
         {
             if(code == Code.Text)
             {
                 /*откючение таймера*/
-                MessageBox.Show("Вы зашли как (роль пользователя)");
+                MessageBox.Show($"Ваша роль: {GlobalData.AuthUser.RolesEmployees.NameRole.ToLower()}");
             }
             else
             {
@@ -120,6 +137,11 @@ namespace TNS__provider_.Pages
             }
         }
 
+        /// <summary>
+        /// Действия при нажатии на кнопку обнолвения кода.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UpdateCode_Click(object sender, RoutedEventArgs e)
         {
             GenerateCode();

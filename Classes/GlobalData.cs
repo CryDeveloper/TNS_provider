@@ -11,6 +11,6 @@ namespace TNS__provider_.Classes
     {
         public static Frame ActiveMainFrame = new Frame();
 
-        public static Users AuthUser;
+        public static Employees AuthUser;
     }
 }
