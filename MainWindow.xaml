@@ -7,23 +7,36 @@
         mc:Ignorable="d"
         Title="Телеком Нева Связь" Height="600" Width="800"
         MinHeight="450" MinWidth="700">
-    <Grid>
+    <Grid >
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
+            <ColumnDefinition x:Name="MenuColumn" Width="150" />
             <ColumnDefinition Width="*"/>
             <!--минимум должен быть 650 у окошка-->
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0">
-            <Image Source="/Resource/Лого ТНС.jpg" />
-            <Button x:Name="btnAbonent" Content="Абоненты" Click="btnAbonent_Click"/>
-            <Button x:Name="btnManageEqip" Content="Управление оборудованием" Click="btnManageEqip_Click"/>
-            <Button x:Name="btnActive" Content="Активы" Click="btnActive_Click"/>
-            <Button x:Name="btnBilling" Content="Биллинг" Click="btnBilling_Click"/>
-            <Button x:Name="btnUserSupport" Content="Поддержка пользователей" Click="btnUserSupport_Click"/>
-            <Button x:Name="btnCRM" Content="CRM" Click="btnCRM_Click"/>
-            <Button VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,30,5,5" />
-            <Button VerticalAlignment="Bottom" HorizontalAlignment="Center" />
-        </StackPanel>
+        <Grid Name="Menu" Grid.Column="0" MouseEnter="Menu_MouseEnter" MouseLeave="Menu_MouseLeave" Background="White">
+            <StackPanel x:Name="BigMenu" VerticalAlignment="Top" Width="150">
+                <Image Source="/Resource/Лого ТНС.jpg" />
+                <Button Name="btnAbonent" Content="Абоненты" Click="btnAbonent_Click" Style="{StaticResource BigMenuButton}" Visibility="Visible"/>
+                <Button Name="btnManageEqip" Content="Управление оборудованием" Click="btnManageEqip_Click" Style="{StaticResource BigMenuButton}"/>
+                <Button Name="btnActive" Content="Активы" Click="btnActive_Click" Style="{StaticResource BigMenuButton}"/>
+                <Button Name="btnBilling" Content="Биллинг" Click="btnBilling_Click" Style="{StaticResource BigMenuButton}"/>
+                <Button Name="btnUserSupport" Content="Поддержка пользователей" Click="btnUserSupport_Click" Style="{StaticResource BigMenuButton}"/>
+                <Button Name="btnCRM" Content="CRM" Click="btnCRM_Click" Style="{StaticResource BigMenuButton}"/>
+            </StackPanel>
+            <StackPanel x:Name="LittleMenu" VerticalAlignment="Top"  Visibility="Collapsed">
+                <Image Source="/Resource/Лого ТНС.jpg" />
+                <Image Source="/Resource/Абоненты.png" Style="{StaticResource ImgMenu}" Visibility="Visible"/>
+                <Image Source="/Resource/Управление оборудованием.jpg" Style="{StaticResource ImgMenu}"/>
+                <Image Source="/Resource/Активы.png" Style="{StaticResource ImgMenu}"/>
+                <Image Source="/Resource/Биллинг.jpg" Style="{StaticResource ImgMenu}"/>
+                <Image Source="/Resource/Поддержка пользователей.jpg" Style="{StaticResource ImgMenu}"/>
+                <Image Source="/Resource/CRM.png" Style="{StaticResource ImgMenu}"/>
+            </StackPanel>
+            <StackPanel VerticalAlignment="Bottom" Margin="10">
+                <Button VerticalAlignment="Top" HorizontalAlignment="Center" Content="проф." Style="{StaticResource CircleButton}"/>
+                <Button VerticalAlignment="Center" HorizontalAlignment="Center" Content="?" Style="{StaticResource CircleButton}" FontSize="25"/>
+            </StackPanel>
+        </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="130"/>
@@ -35,11 +48,16 @@
                     DockPanel.Dock="Left" 
                     VerticalAlignment="Center"
                     Style="{StaticResource Header}"/>
-                <Image x:Name="imgUser"
+                <Border CornerRadius="40" Margin="10" Height="70" Width="70" DockPanel.Dock="Right" BorderBrush="Black" BorderThickness="1">
+                    <Border.Background>
+                        <ImageBrush x:Name="imgUser"/>
+                    </Border.Background>
+                </Border>
+                <!--<Image x:Name="imgUser"
                        DockPanel.Dock="Right"
-                       Source="/Resource/ID1516.jpg"/>
-                <ComboBox Name="cbUser"
-                     DockPanel.Dock="Right" VerticalAlignment="Center"/>
+                       Source="/Resource/ID1516.jpg"/>-->
+                <ComboBox Name="cbUser" DockPanel.Dock="Right" VerticalAlignment="Center" Width="175" 
+                          DisplayMemberPath="FulName" SelectionChanged="cbUser_SelectionChanged"/>
             </DockPanel>
             <Frame x:Name="MainWindowFrame" NavigationUIVisibility="Hidden" Grid.Row="1"/>
         </Grid>

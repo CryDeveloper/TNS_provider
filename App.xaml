@@ -17,10 +17,51 @@
             <Setter Property="Padding" Value="3"/>
             <Setter Property="MinWidth" Value="200"/>
         </Style>-->
-        <Style TargetType="Button">
+        <Style x:Key="BigMenuButton" TargetType="Button">
             <Setter Property="FontSize" Value="10"/>
             <Setter Property="Margin" Value="5"/>
             <Setter Property="Padding" Value="3"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+            <Setter Property="Visibility" Value="Collapsed"/>
         </Style>
+        
+        <Style x:Key="CircleButton" TargetType="Button">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="3"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Padding" Value="3"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="40"
+                            Background="DarkGray"
+                            BorderBrush="{x:Null}">
+                            <ContentPresenter
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="{TemplateBinding Padding}" ></ContentPresenter>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ImgMenu" TargetType="Image">
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="Visibility" Value="Collapsed"/>
+        </Style>
+        
+        <Style x:Key="MenuSizeControl" TargetType="Button" BasedOn="{StaticResource BigMenuButton}">
+            <Setter Property="Background" Value="{x:Null}"/>
+            <Setter Property="Foreground" Value="#FF383838"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        
+        
     </Application.Resources>
 </Application>
