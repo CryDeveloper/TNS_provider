@@ -37,11 +37,7 @@
                     <TextBox x:Name="Password" IsEnabled="False" KeyUp="Password_KeyUp" />
                     <StackPanel x:Name="ForCodePanel"  Orientation="Horizontal" IsEnabled="False" >
                         <TextBox x:Name="Code" KeyUp="Code_KeyUp"/>
-                        <Button x:Name="UpdateCode" Width="30" Height="30" BorderBrush="{x:Null}" Foreground="{x:Null}" Click="UpdateCode_Click">
-                            <Button.Background>
-                                <ImageBrush ImageSource="/Resource/update_btn.jpg"/>
-                            </Button.Background>
-                        </Button>
+                        <Image x:Name="imgUpdate"  MouseDown="imgUpdate_MouseDown" Width="35" Source="/Resource/update_btn.jpg"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="Auto" Margin="0,20,0,20">
                         <Button x:Name="Cancel" Content="Отмена" Padding="5" Style="{StaticResource AuthBtn}" Click="Cancel_Click"/>
