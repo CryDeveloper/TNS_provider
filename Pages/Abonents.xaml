@@ -6,10 +6,10 @@
       xmlns:local="clr-namespace:TNS__provider_.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="600" d:DesignWidth="650"
-      Title="Abonents">
+      Title="Все абоненты">
 
     <Grid>
-        <Grid.ColumnDefinitions>
+        <!--<Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="150"/>
         </Grid.ColumnDefinitions>
@@ -30,6 +30,78 @@
         <StackPanel Grid.Column="1">
             <TextBlock Text="События" Style="{StaticResource Text}" HorizontalAlignment="Center" />
             <ListView ScrollViewer.VerticalScrollBarVisibility="Visible"/>
-        </StackPanel>
+        </StackPanel>-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <!--<StackPanel Orientation="Vertical" Grid.Column="0" Margin="10">
+                <TextBlock Text="Фамилия" HorizontalAlignment="Center"/>
+                <TextBox x:Name="tbSearchSurname" SelectionChanged="tbSearchSurname_SelectionChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Grid.Column="1" Margin="10">
+                <TextBlock Text="Район" HorizontalAlignment="Center"/>
+                <ComboBox x:Name="cmbFilterRaions" SelectionChanged="cbFilterRaion_SelectionChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Grid.Column="2" Margin="10">
+                <TextBlock Text="Улица" HorizontalAlignment="Center"/>
+                <ComboBox x:Name="cmbFIlterStreets" SelectionChanged="cbFilterStreet_SelectionChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Grid.Column="3" Margin="10">
+                <TextBlock Text="Номер дома" HorizontalAlignment="Center"/>
+                <ComboBox x:Name="cmbFilterNumberHome" SelectionChanged="cbFiltNomerHouse_SelectionChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Grid.Column="4" Margin="10">
+                <TextBlock Text="Лицевой счет" HorizontalAlignment="Center"/>
+                <TextBox x:Name="tbSearchPersonalAccount" PreviewTextInput="tbSearchPersonalAccount_PreviewTextInput" SelectionChanged="tbSearchSurname_SelectionChanged" />
+            </StackPanel>-->
+        </Grid>
+        <DataGrid Name="dgSubscribers" Grid.Row="1" Margin="10" FontSize="18" AutoGenerateColumns="False" CanUserAddRows="False" MouseDoubleClick="dgSubscribers_MouseDoubleClick">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Номер" Binding="{Binding SubscriberNomer}" Width="1*"></DataGridTextColumn>
+                <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}" Width="2*"></DataGridTextColumn>
+                <DataGridTextColumn Header="Номер договора" Binding="{Binding Contracts.ContractNumber}" Width="2*"></DataGridTextColumn>
+                <DataGridTextColumn Header="ЛС" Binding="{Binding  Contracts.PersonalAccount}" Width="1*"></DataGridTextColumn>
+                <DataGridTextColumn Header="Услуги" Binding="{Binding  Uslugi}" Width="2*"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                <CheckBox Name="cbActive" Content="Активные"  VerticalAlignment="Center" Click="cbActive_Click">
+                    <CheckBox.ToolTip>
+                        <ToolTip>
+                            Активные клиенты
+                        </ToolTip>
+                    </CheckBox.ToolTip>
+                </CheckBox>
+
+
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                <CheckBox Name="cbNoActive" Content="Неактивные"  VerticalAlignment="Center" Click="cbActive_Click">
+                    <CheckBox.ToolTip>
+                        <ToolTip>
+                            Неактивные клиенты
+                        </ToolTip>
+                    </CheckBox.ToolTip>
+                </CheckBox>
+
+            </StackPanel >
+
+        </Grid>
     </Grid>
 </Page>

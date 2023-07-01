@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TNS__provider_.Classes;
+using TNS__provider_.Model;
 
 namespace TNS__provider_.Pages
 {
@@ -20,9 +22,77 @@ namespace TNS__provider_.Pages
     /// </summary>
     public partial class Abonents : Page
     {
+        bool b;
+
         public Abonents()
         {
             InitializeComponent();
+            b = true;
         }
+
+        void Filter()
+        {
+            List<Subscribers> subscribers = new List<Subscribers>();
+
+            if ((bool)cbActive.IsChecked && (bool)cbNoActive.IsChecked)
+            {
+                subscribers = GlobalData.ConnectDB.Subscribers.ToList();
+            }
+            else if ((bool)cbActive.IsChecked && (bool)!cbNoActive.IsChecked)
+            {
+                subscribers = GlobalData.ConnectDB.Subscribers.Where(x => x.Contracts.TerminationDate == null).ToList();
+            }
+            else if ((bool)!cbActive.IsChecked && (bool)cbNoActive.IsChecked)
+            {
+                subscribers = GlobalData.ConnectDB.Subscribers.Where(x => x.Contracts.TerminationDate != null).ToList();
+            }
+            else
+            {
+                subscribers = new List<Subscribers>();
+            }
+
+            dgSubscribers.ItemsSource = subscribers;
+            if (subscribers.Count == 0 && b)
+            {
+                MessageBox.Show("Отсутствуют требования, удовлетворяющие результатам поиска");
+            }
+        }
+
+        private void dgSubscribers_MouseDoubleClick(object sender, MouseButtonEventArgs e) // При двойном нажатие открывается страница с подробным описанием абонента
+        {
+            Subscribers subscriber = new Subscribers();
+            foreach (Subscribers subscribers in dgSubscribers.SelectedItems)
+            {
+                subscriber = subscribers;
+            }
+            if (subscriber == null)
+            {
+                return;
+            }
+            else
+            {
+                NavigationService.Navigate(new PageAboutAbonent(subscriber));
+            }
+        }
+
+        private void tbSearchPersonalAccount_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (!(Char.IsDigit(e.Text, 0)))
+            {
+                e.Handled = true;
+            }
+        }
+        private void cbActive_Click(object sender, RoutedEventArgs e)
+        {
+            b = true;
+            Filter();
+        }
+
+        private void tbSearchSurname_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            b = true;
+            Filter();
+        }
+
     }
 }
