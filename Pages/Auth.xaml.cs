@@ -24,6 +24,7 @@ namespace TNS__provider_.Pages
     /// </summary>
     public partial class Auth : Page
     {
+        private DbTnsEntities _db = new DbTnsEntities();
         private DispatcherTimer dispatcher;
         //dispatcher = new DispatcherTimer();
         //dispatcher.Interval = new TimeSpan(0, 0, 1);
@@ -72,7 +73,7 @@ namespace TNS__provider_.Pages
             TextBox textBox = sender as TextBox;
             if (textBox.Text != null && k.Key == Key.Enter)
             {
-                GlobalData.AuthUser = DbTnsEntities.GetContext().Employees.FirstOrDefault(x => x.Number == textBox.Text);
+                GlobalData.AuthUser = _db.Employees.FirstOrDefault(x => x.Number == textBox.Text);
                 if (GlobalData.AuthUser != null)
                 {
                     Password.IsEnabled = true;
