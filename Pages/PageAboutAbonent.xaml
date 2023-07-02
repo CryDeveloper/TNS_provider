@@ -7,7 +7,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Детальная информация о абоненте">
-    <Grid>
+    <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="60"/>
@@ -21,14 +21,14 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Name="tbSurname" Text="Фамилия: " HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0"/>
+                    <TextBlock Name="tbSurname" Text="Фамилия:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0"/>
                     <TextBlock Name="tbName" Text="Имя: " HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1"/>
                     <TextBlock Name="tbPatronymic" Text="Отчество: " HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="2"/>
                 </Grid>
                 <TextBlock x:Name="tbPlace0fResidence" Text="Адрес прописки: " TextWrapping="Wrap"/>
                 <TextBlock x:Name="tbResidentialAddress" Text="Адрес проживания: " TextWrapping="Wrap"/>
-                <GroupBox Header="Паспортные данные" Margin="0 10 0 10">
-                    <StackPanel>
+                <StackPanel Margin="0 10 0 10" Style="{StaticResource GroupData}">
+                        <TextBlock Text="Паспортные данные" Style="{StaticResource HeaderGroup}"/>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
@@ -41,48 +41,49 @@
                         </Grid>
                         <TextBlock Name="tbIssuedBy" Text="Выдан: "/>
                     </StackPanel>
-                </GroupBox>
-                <GroupBox Header="Договор с абонентом" Margin="0 10 0 10">
-                    <StackPanel>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Name="tbContractNumber" Text="Номер: " HorizontalAlignment="Left" Grid.Column="0"/>
-                            <TextBlock Name="tbDateOfCinclusion" Text="Дата заключения: " HorizontalAlignment="Left" Grid.Column="1"/>
-                        </Grid>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Name="tbTypeContract" Text="Тип договора: " HorizontalAlignment="Left" Grid.Column="0"/>
-                            <TextBlock Name="tbPersonalAccount" Text="ЛС: " HorizontalAlignment="Left" Grid.Column="1"/>
-                        </Grid>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Name="tbTermibationDate" Text="Дата расторжения: " HorizontalAlignment="Left" Grid.Column="0"/>
-                            <TextBlock Name="tbReasonForTermination" Text="Причина расторжения: " HorizontalAlignment="Left" Grid.Column="1"/>
-                        </Grid>
-                    </StackPanel>
-                </GroupBox>
-                <GroupBox Header="Подключенные услуги" Margin="0 10 0 10">
+                <StackPanel Margin="0 10 0 10" Style="{StaticResource GroupData}">
+                    <TextBlock Text="Договор с абонентом" Style="{StaticResource HeaderGroup}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Name="tbContractNumber" Text="Номер: " HorizontalAlignment="Left" Grid.Column="0"/>
+                        <TextBlock Name="tbDateOfCinclusion" Text="Дата заключения: " HorizontalAlignment="Left" Grid.Column="1"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Name="tbTypeContract" Text="Тип договора: " HorizontalAlignment="Left" Grid.Column="0"/>
+                        <TextBlock Name="tbPersonalAccount" Text="ЛС: " HorizontalAlignment="Left" Grid.Column="1"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Name="tbTermibationDate" Text="Дата расторжения: " HorizontalAlignment="Left" Grid.Column="0"/>
+                        <TextBlock Name="tbReasonForTermination" Text="Причина расторжения: " HorizontalAlignment="Left" Grid.Column="1"/>
+                    </Grid>
+                </StackPanel>
+                <StackPanel Margin="0 10 0 10" Style="{StaticResource GroupData}">
+                    <TextBlock Text="Подключенные услуги" Style="{StaticResource HeaderGroup}"/>
                     <TextBlock Name="listService"/>
-                </GroupBox>
-                <GroupBox Header="Оборудование" Margin="0 10 0 10">
+                </StackPanel>
+                <StackPanel Margin="0 10 0 10" Style="{StaticResource GroupData}">
+                    <TextBlock Text="Оборудование" Style="{StaticResource HeaderGroup}"/>
                     <TextBlock Name="listEquipments" TextWrapping="Wrap"/>
-                </GroupBox>
-                <GroupBox Header="История обращения в техническую поддержку за 12 месяцев" Margin="0 10 0 10">
+                </StackPanel>
+                <StackPanel Margin="0 10 0 10" Style="{StaticResource GroupData}">
+                    <TextBlock Text="История обращения в техническую поддержку за 12 месяцев" Style="{StaticResource HeaderGroup}"/>
                     <TextBlock Name="listCRM" TextWrapping="Wrap"/>
-                </GroupBox>
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
         <Grid Grid.Row="2" HorizontalAlignment="Center">
-            <Button x:Name="btnBack" Content="Назад" Background="#4A67F7"   HorizontalAlignment="Left" Width="100" Height="40" Click="btnBack_Click" Cursor="Hand"/>
+            <Button x:Name="btnBack" Content="Назад" Width="100" Margin="10" Click="btnBack_Click" Cursor="Hand"/>
         </Grid>   
     </Grid>
 </Page>

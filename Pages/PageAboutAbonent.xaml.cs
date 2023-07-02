@@ -25,7 +25,9 @@ namespace TNS__provider_.Pages
         public PageAboutAbonent(Subscribers subscriber)
         {
             InitializeComponent();
-            
+            //MainGrid.DataContext = subscriber;
+
+
         }
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
