@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TNS__provider_.Model;
 
 namespace TNS__provider_.Pages
 {
@@ -20,9 +21,15 @@ namespace TNS__provider_.Pages
     /// </summary>
     public partial class PageAboutAbonent : Page
     {
-        public PageAboutAbonent()
+        Subscribers subscriber;
+        public PageAboutAbonent(Subscribers subscriber)
         {
             InitializeComponent();
+            
+        }
+        private void btnBack_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
         }
     }
 }

@@ -18,10 +18,12 @@ namespace TNS__provider_.Model
         public Contracts()
         {
             this.ServicesInContract = new HashSet<ServicesInContract>();
+            this.Subscribers = new HashSet<Subscribers>();
         }
     
+        public int Id { get; set; }
         public string ContractNumber { get; set; }
-        public string NumberSubscriber { get; set; }
+        public int IdSubscriber { get; set; }
         public System.DateTime DateOfCinclusion { get; set; }
         public int TypeContractId { get; set; }
         public int PersonalAccount { get; set; }
@@ -32,9 +34,10 @@ namespace TNS__provider_.Model
     
         public virtual Equips Equips { get; set; }
         public virtual ReasonsForTermination ReasonsForTermination { get; set; }
-        public virtual Subscribers Subscribers { get; set; }
         public virtual TypesContract TypesContract { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ServicesInContract> ServicesInContract { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Subscribers> Subscribers { get; set; }
     }
 }

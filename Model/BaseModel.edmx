@@ -15,10 +15,11 @@
         </EntityType>
         <EntityType Name="Contracts">
           <Key>
-            <PropertyRef Name="ContractNumber" />
+            <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="ContractNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="NumberSubscriber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="IdSubscriber" Type="int" Nullable="false" />
           <Property Name="DateOfCinclusion" Type="date" Nullable="false" />
           <Property Name="TypeContractId" Type="int" Nullable="false" />
           <Property Name="PersonalAccount" Type="int" Nullable="false" />
@@ -86,13 +87,14 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="ContractNumberId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ContractNumberId" Type="int" Nullable="false" />
           <Property Name="TypeServicesId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Subscribers">
           <Key>
-            <PropertyRef Name="NumberSubscriber" />
+            <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="NumberSubscriber" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Surname" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -108,6 +110,7 @@
           <Property Name="Unit_Code" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ByWhomIssued" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="DateOfIssue" Type="date" Nullable="false" />
+          <Property Name="ContractId" Type="int" />
         </EntityType>
         <EntityType Name="TypesContract">
           <Key>
@@ -152,7 +155,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Contracts_ReasonsForTermination">
+        <Association Name="FK_Contracts_ReasonsForTermination1">
           <End Role="ReasonsForTermination" Type="Self.ReasonsForTermination" Multiplicity="0..1" />
           <End Role="Contracts" Type="Self.Contracts" Multiplicity="*" />
           <ReferentialConstraint>
@@ -161,18 +164,6 @@
             </Principal>
             <Dependent Role="Contracts">
               <PropertyRef Name="ReasonForTerminationID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Contracts_Subscribers">
-          <End Role="Subscribers" Type="Self.Subscribers" Multiplicity="1" />
-          <End Role="Contracts" Type="Self.Contracts" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Subscribers">
-              <PropertyRef Name="NumberSubscriber" />
-            </Principal>
-            <Dependent Role="Contracts">
-              <PropertyRef Name="NumberSubscriber" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -205,7 +196,7 @@
           <End Role="ServicesInContract" Type="Self.ServicesInContract" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Contracts">
-              <PropertyRef Name="ContractNumber" />
+              <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="ServicesInContract">
               <PropertyRef Name="ContractNumberId" />
@@ -221,6 +212,18 @@
             </Principal>
             <Dependent Role="ServicesInContract">
               <PropertyRef Name="TypeServicesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subscribers_Contracts">
+          <End Role="Contracts" Type="Self.Contracts" Multiplicity="0..1" />
+          <End Role="Subscribers" Type="Self.Subscribers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contracts">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Subscribers">
+              <PropertyRef Name="ContractId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -261,12 +264,8 @@
             <End Role="Equips" EntitySet="Equips" />
             <End Role="Contracts" EntitySet="Contracts" />
           </AssociationSet>
-          <AssociationSet Name="FK_Contracts_ReasonsForTermination" Association="Self.FK_Contracts_ReasonsForTermination">
+          <AssociationSet Name="FK_Contracts_ReasonsForTermination1" Association="Self.FK_Contracts_ReasonsForTermination1">
             <End Role="ReasonsForTermination" EntitySet="ReasonsForTermination" />
-            <End Role="Contracts" EntitySet="Contracts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Contracts_Subscribers" Association="Self.FK_Contracts_Subscribers">
-            <End Role="Subscribers" EntitySet="Subscribers" />
             <End Role="Contracts" EntitySet="Contracts" />
           </AssociationSet>
           <AssociationSet Name="FK_Contracts_TypesContract" Association="Self.FK_Contracts_TypesContract">
@@ -284,6 +283,10 @@
           <AssociationSet Name="FK_ServicesInContract_Services" Association="Self.FK_ServicesInContract_Services">
             <End Role="Services" EntitySet="Services" />
             <End Role="ServicesInContract" EntitySet="ServicesInContract" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subscribers_Contracts" Association="Self.FK_Subscribers_Contracts">
+            <End Role="Contracts" EntitySet="Contracts" />
+            <End Role="Subscribers" EntitySet="Subscribers" />
           </AssociationSet>
           <AssociationSet Name="FK_Subscribers_Genders" Association="Self.FK_Subscribers_Genders">
             <End Role="Genders" EntitySet="Genders" />
@@ -294,260 +297,19 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DB_TNSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Contracts">
-          <Key>
-            <PropertyRef Name="ContractNumber" />
-          </Key>
-          <Property Name="ContractNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="NumberSubscriber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="DateOfCinclusion" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="TypeContractId" Type="Int32" Nullable="false" />
-          <Property Name="PersonalAccount" Type="Int32" Nullable="false" />
-          <Property Name="ConnectedEquipId" Type="Int32" Nullable="false" />
-          <Property Name="ReasonForTerminationID" Type="Int32" />
-          <Property Name="TerminationDate" Type="DateTime" Precision="0" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Equips" Relationship="Self.FK_Contracts_Equips" FromRole="Contracts" ToRole="Equips" />
-          <NavigationProperty Name="ReasonsForTermination" Relationship="Self.FK_Contracts_ReasonsForTermination" FromRole="Contracts" ToRole="ReasonsForTermination" />
-          <NavigationProperty Name="Subscribers" Relationship="Self.FK_Contracts_Subscribers" FromRole="Contracts" ToRole="Subscribers" />
-          <NavigationProperty Name="TypesContract" Relationship="Self.FK_Contracts_TypesContract" FromRole="Contracts" ToRole="TypesContract" />
-          <NavigationProperty Name="ServicesInContract" Relationship="Self.FK_ServicesInContract_Contracts" FromRole="Contracts" ToRole="ServicesInContract" />
-        </EntityType>
-        <EntityType Name="Employees">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="RoleId" Type="Int32" Nullable="false" />
-          <Property Name="Number" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="RolesEmployees" Relationship="Self.FK_Employees_RolesEmployees" FromRole="Employees" ToRole="RolesEmployees" />
-        </EntityType>
-        <EntityType Name="Equips">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="EquipSerialNumber__EquipSerialNumber__EquipSerialNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Contracts" Relationship="Self.FK_Contracts_Equips" FromRole="Equips" ToRole="Contracts" />
-        </EntityType>
-        <EntityType Name="Genders">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Gender" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Subscribers" Relationship="Self.FK_Subscribers_Genders" FromRole="Genders" ToRole="Subscribers" />
-        </EntityType>
-        <EntityType Name="ReasonsForTermination">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="NameReasonTermination" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Contracts" Relationship="Self.FK_Contracts_ReasonsForTermination" FromRole="ReasonsForTermination" ToRole="Contracts" />
-        </EntityType>
-        <EntityType Name="RolesEmployees">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NameRole" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Employees" Relationship="Self.FK_Employees_RolesEmployees" FromRole="RolesEmployees" ToRole="Employees" />
-          <NavigationProperty Name="AccesToMenuItems" Relationship="DB_TNSModel.FK_AccesToMenuItems_RolesEmployees" FromRole="RolesEmployees" ToRole="AccesToMenuItems" />
-        </EntityType>
-        <EntityType Name="Services">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="NameService" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="ServicesInContract" Relationship="Self.FK_ServicesInContract_Services" FromRole="Services" ToRole="ServicesInContract" />
-        </EntityType>
-        <EntityType Name="ServicesInContract">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="ContractNumberId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="TypeServicesId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Contracts" Relationship="Self.FK_ServicesInContract_Contracts" FromRole="ServicesInContract" ToRole="Contracts" />
-          <NavigationProperty Name="Services" Relationship="Self.FK_ServicesInContract_Services" FromRole="ServicesInContract" ToRole="Services" />
-        </EntityType>
-        <EntityType Name="Subscribers">
-          <Key>
-            <PropertyRef Name="NumberSubscriber" />
-          </Key>
-          <Property Name="NumberSubscriber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="IdGender" Type="Int32" Nullable="false" />
-          <Property Name="BirthDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Telephone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ResidenceAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="ResidentialAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="PassportSeries" Type="String" MaxLength="4" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="PassportNumber" Type="String" MaxLength="6" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Unit_Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ByWhomIssued" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="DateOfIssue" Type="DateTime" Nullable="false" Precision="0" />
-          <NavigationProperty Name="Contracts" Relationship="Self.FK_Contracts_Subscribers" FromRole="Subscribers" ToRole="Contracts" />
-          <NavigationProperty Name="Genders" Relationship="Self.FK_Subscribers_Genders" FromRole="Subscribers" ToRole="Genders" />
-        </EntityType>
-        <EntityType Name="TypesContract">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="TypeContract" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Contracts" Relationship="Self.FK_Contracts_TypesContract" FromRole="TypesContract" ToRole="Contracts" />
-        </EntityType>
-        <Association Name="FK_Contracts_Equips">
-          <End Role="Equips" Type="Self.Equips" Multiplicity="1" />
-          <End Role="Contracts" Type="Self.Contracts" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Equips">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Contracts">
-              <PropertyRef Name="ConnectedEquipId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Contracts_ReasonsForTermination">
-          <End Role="ReasonsForTermination" Type="Self.ReasonsForTermination" Multiplicity="0..1" />
-          <End Role="Contracts" Type="Self.Contracts" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ReasonsForTermination">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Contracts">
-              <PropertyRef Name="ReasonForTerminationID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Contracts_Subscribers">
-          <End Role="Subscribers" Type="Self.Subscribers" Multiplicity="1" />
-          <End Role="Contracts" Type="Self.Contracts" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Subscribers">
-              <PropertyRef Name="NumberSubscriber" />
-            </Principal>
-            <Dependent Role="Contracts">
-              <PropertyRef Name="NumberSubscriber" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Contracts_TypesContract">
-          <End Role="TypesContract" Type="Self.TypesContract" Multiplicity="1" />
-          <End Role="Contracts" Type="Self.Contracts" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TypesContract">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Contracts">
-              <PropertyRef Name="TypeContractId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ServicesInContract_Contracts">
-          <End Role="Contracts" Type="Self.Contracts" Multiplicity="1" />
-          <End Role="ServicesInContract" Type="Self.ServicesInContract" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Contracts">
-              <PropertyRef Name="ContractNumber" />
-            </Principal>
-            <Dependent Role="ServicesInContract">
-              <PropertyRef Name="ContractNumberId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Employees_RolesEmployees">
-          <End Role="RolesEmployees" Type="Self.RolesEmployees" Multiplicity="1" />
-          <End Role="Employees" Type="Self.Employees" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="RolesEmployees">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Employees">
-              <PropertyRef Name="RoleId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Subscribers_Genders">
-          <End Role="Genders" Type="Self.Genders" Multiplicity="1" />
-          <End Role="Subscribers" Type="Self.Subscribers" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Genders">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Subscribers">
-              <PropertyRef Name="IdGender" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ServicesInContract_Services">
-          <End Role="Services" Type="Self.Services" Multiplicity="1" />
-          <End Role="ServicesInContract" Type="Self.ServicesInContract" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Services">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ServicesInContract">
-              <PropertyRef Name="TypeServicesId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="DB_TNSEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Contracts" EntityType="Self.Contracts" />
-          <EntitySet Name="Employees" EntityType="Self.Employees" />
-          <EntitySet Name="Equips" EntityType="Self.Equips" />
-          <EntitySet Name="Genders" EntityType="Self.Genders" />
-          <EntitySet Name="ReasonsForTermination" EntityType="Self.ReasonsForTermination" />
-          <EntitySet Name="RolesEmployees" EntityType="Self.RolesEmployees" />
-          <EntitySet Name="Services" EntityType="Self.Services" />
-          <EntitySet Name="ServicesInContract" EntityType="Self.ServicesInContract" />
-          <EntitySet Name="Subscribers" EntityType="Self.Subscribers" />
-          <EntitySet Name="TypesContract" EntityType="Self.TypesContract" />
-          <AssociationSet Name="FK_Contracts_Equips" Association="Self.FK_Contracts_Equips">
-            <End Role="Equips" EntitySet="Equips" />
-            <End Role="Contracts" EntitySet="Contracts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Contracts_ReasonsForTermination" Association="Self.FK_Contracts_ReasonsForTermination">
-            <End Role="ReasonsForTermination" EntitySet="ReasonsForTermination" />
-            <End Role="Contracts" EntitySet="Contracts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Contracts_Subscribers" Association="Self.FK_Contracts_Subscribers">
-            <End Role="Subscribers" EntitySet="Subscribers" />
-            <End Role="Contracts" EntitySet="Contracts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Contracts_TypesContract" Association="Self.FK_Contracts_TypesContract">
-            <End Role="TypesContract" EntitySet="TypesContract" />
-            <End Role="Contracts" EntitySet="Contracts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ServicesInContract_Contracts" Association="Self.FK_ServicesInContract_Contracts">
-            <End Role="Contracts" EntitySet="Contracts" />
-            <End Role="ServicesInContract" EntitySet="ServicesInContract" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Employees_RolesEmployees" Association="Self.FK_Employees_RolesEmployees">
-            <End Role="RolesEmployees" EntitySet="RolesEmployees" />
-            <End Role="Employees" EntitySet="Employees" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Subscribers_Genders" Association="Self.FK_Subscribers_Genders">
-            <End Role="Genders" EntitySet="Genders" />
-            <End Role="Subscribers" EntitySet="Subscribers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ServicesInContract_Services" Association="Self.FK_ServicesInContract_Services">
-            <End Role="Services" EntitySet="Services" />
-            <End Role="ServicesInContract" EntitySet="ServicesInContract" />
-          </AssociationSet>
           <EntitySet Name="AccesToMenuItems" EntityType="DB_TNSModel.AccesToMenuItems" />
+          <EntitySet Name="Contracts" EntityType="DB_TNSModel.Contracts" />
+          <EntitySet Name="Employees" EntityType="DB_TNSModel.Employees" />
+          <EntitySet Name="Equips" EntityType="DB_TNSModel.Equips" />
+          <EntitySet Name="Genders" EntityType="DB_TNSModel.Genders" />
           <EntitySet Name="MenuItems" EntityType="DB_TNSModel.MenuItems" />
+          <EntitySet Name="ReasonsForTermination" EntityType="DB_TNSModel.ReasonsForTermination" />
+          <EntitySet Name="RolesEmployees" EntityType="DB_TNSModel.RolesEmployees" />
+          <EntitySet Name="Services" EntityType="DB_TNSModel.Services" />
+          <EntitySet Name="ServicesInContract" EntityType="DB_TNSModel.ServicesInContract" />
+          <EntitySet Name="Subscribers" EntityType="DB_TNSModel.Subscribers" />
+          <EntitySet Name="TypesContract" EntityType="DB_TNSModel.TypesContract" />
           <AssociationSet Name="FK_AccesToMenuItems_MenuItems" Association="DB_TNSModel.FK_AccesToMenuItems_MenuItems">
             <End Role="MenuItems" EntitySet="MenuItems" />
             <End Role="AccesToMenuItems" EntitySet="AccesToMenuItems" />
@@ -555,6 +317,38 @@
           <AssociationSet Name="FK_AccesToMenuItems_RolesEmployees" Association="DB_TNSModel.FK_AccesToMenuItems_RolesEmployees">
             <End Role="RolesEmployees" EntitySet="RolesEmployees" />
             <End Role="AccesToMenuItems" EntitySet="AccesToMenuItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contracts_Equips" Association="DB_TNSModel.FK_Contracts_Equips">
+            <End Role="Equips" EntitySet="Equips" />
+            <End Role="Contracts" EntitySet="Contracts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contracts_ReasonsForTermination1" Association="DB_TNSModel.FK_Contracts_ReasonsForTermination1">
+            <End Role="ReasonsForTermination" EntitySet="ReasonsForTermination" />
+            <End Role="Contracts" EntitySet="Contracts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contracts_TypesContract" Association="DB_TNSModel.FK_Contracts_TypesContract">
+            <End Role="TypesContract" EntitySet="TypesContract" />
+            <End Role="Contracts" EntitySet="Contracts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ServicesInContract_Contracts" Association="DB_TNSModel.FK_ServicesInContract_Contracts">
+            <End Role="Contracts" EntitySet="Contracts" />
+            <End Role="ServicesInContract" EntitySet="ServicesInContract" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subscribers_Contracts" Association="DB_TNSModel.FK_Subscribers_Contracts">
+            <End Role="Contracts" EntitySet="Contracts" />
+            <End Role="Subscribers" EntitySet="Subscribers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_RolesEmployees" Association="DB_TNSModel.FK_Employees_RolesEmployees">
+            <End Role="RolesEmployees" EntitySet="RolesEmployees" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subscribers_Genders" Association="DB_TNSModel.FK_Subscribers_Genders">
+            <End Role="Genders" EntitySet="Genders" />
+            <End Role="Subscribers" EntitySet="Subscribers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ServicesInContract_Services" Association="DB_TNSModel.FK_ServicesInContract_Services">
+            <End Role="Services" EntitySet="Services" />
+            <End Role="ServicesInContract" EntitySet="ServicesInContract" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="AccesToMenuItems">
@@ -567,6 +361,55 @@
           <NavigationProperty Name="MenuItems" Relationship="DB_TNSModel.FK_AccesToMenuItems_MenuItems" FromRole="AccesToMenuItems" ToRole="MenuItems" />
           <NavigationProperty Name="RolesEmployees" Relationship="DB_TNSModel.FK_AccesToMenuItems_RolesEmployees" FromRole="AccesToMenuItems" ToRole="RolesEmployees" />
         </EntityType>
+        <EntityType Name="Contracts">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="ContractNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IdSubscriber" Type="Int32" Nullable="false" />
+          <Property Name="DateOfCinclusion" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="TypeContractId" Type="Int32" Nullable="false" />
+          <Property Name="PersonalAccount" Type="Int32" Nullable="false" />
+          <Property Name="ConnectedEquipId" Type="Int32" Nullable="false" />
+          <Property Name="ReasonForTerminationID" Type="Int32" />
+          <Property Name="TerminationDate" Type="DateTime" Precision="0" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Equips" Relationship="DB_TNSModel.FK_Contracts_Equips" FromRole="Contracts" ToRole="Equips" />
+          <NavigationProperty Name="ReasonsForTermination" Relationship="DB_TNSModel.FK_Contracts_ReasonsForTermination1" FromRole="Contracts" ToRole="ReasonsForTermination" />
+          <NavigationProperty Name="TypesContract" Relationship="DB_TNSModel.FK_Contracts_TypesContract" FromRole="Contracts" ToRole="TypesContract" />
+          <NavigationProperty Name="ServicesInContract" Relationship="DB_TNSModel.FK_ServicesInContract_Contracts" FromRole="Contracts" ToRole="ServicesInContract" />
+          <NavigationProperty Name="Subscribers" Relationship="DB_TNSModel.FK_Subscribers_Contracts" FromRole="Contracts" ToRole="Subscribers" />
+        </EntityType>
+        <EntityType Name="Employees">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Surname" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RoleId" Type="Int32" Nullable="false" />
+          <Property Name="Number" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="RolesEmployees" Relationship="DB_TNSModel.FK_Employees_RolesEmployees" FromRole="Employees" ToRole="RolesEmployees" />
+        </EntityType>
+        <EntityType Name="Equips">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="EquipSerialNumber__EquipSerialNumber__EquipSerialNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Contracts" Relationship="DB_TNSModel.FK_Contracts_Equips" FromRole="Equips" ToRole="Contracts" />
+        </EntityType>
+        <EntityType Name="Genders">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Gender" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Subscribers" Relationship="DB_TNSModel.FK_Subscribers_Genders" FromRole="Genders" ToRole="Subscribers" />
+        </EntityType>
         <EntityType Name="MenuItems">
           <Key>
             <PropertyRef Name="Id" />
@@ -574,6 +417,73 @@
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Items" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="AccesToMenuItems" Relationship="DB_TNSModel.FK_AccesToMenuItems_MenuItems" FromRole="MenuItems" ToRole="AccesToMenuItems" />
+        </EntityType>
+        <EntityType Name="ReasonsForTermination">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="NameReasonTermination" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Contracts" Relationship="DB_TNSModel.FK_Contracts_ReasonsForTermination1" FromRole="ReasonsForTermination" ToRole="Contracts" />
+        </EntityType>
+        <EntityType Name="RolesEmployees">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NameRole" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AccesToMenuItems" Relationship="DB_TNSModel.FK_AccesToMenuItems_RolesEmployees" FromRole="RolesEmployees" ToRole="AccesToMenuItems" />
+          <NavigationProperty Name="Employees" Relationship="DB_TNSModel.FK_Employees_RolesEmployees" FromRole="RolesEmployees" ToRole="Employees" />
+        </EntityType>
+        <EntityType Name="Services">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="NameService" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ServicesInContract" Relationship="DB_TNSModel.FK_ServicesInContract_Services" FromRole="Services" ToRole="ServicesInContract" />
+        </EntityType>
+        <EntityType Name="ServicesInContract">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="ContractNumberId" Type="Int32" Nullable="false" />
+          <Property Name="TypeServicesId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Contracts" Relationship="DB_TNSModel.FK_ServicesInContract_Contracts" FromRole="ServicesInContract" ToRole="Contracts" />
+          <NavigationProperty Name="Services" Relationship="DB_TNSModel.FK_ServicesInContract_Services" FromRole="ServicesInContract" ToRole="Services" />
+        </EntityType>
+        <EntityType Name="Subscribers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="NumberSubscriber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Surname" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IdGender" Type="Int32" Nullable="false" />
+          <Property Name="BirthDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Telephone" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ResidenceAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ResidentialAddress" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="PassportSeries" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="PassportNumber" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="true" />
+          <Property Name="Unit_Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ByWhomIssued" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="DateOfIssue" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ContractId" Type="Int32" />
+          <NavigationProperty Name="Contracts" Relationship="DB_TNSModel.FK_Subscribers_Contracts" FromRole="Subscribers" ToRole="Contracts" />
+          <NavigationProperty Name="Genders" Relationship="DB_TNSModel.FK_Subscribers_Genders" FromRole="Subscribers" ToRole="Genders" />
+        </EntityType>
+        <EntityType Name="TypesContract">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="TypeContract" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Contracts" Relationship="DB_TNSModel.FK_Contracts_TypesContract" FromRole="TypesContract" ToRole="Contracts" />
         </EntityType>
         <Association Name="FK_AccesToMenuItems_MenuItems">
           <End Type="DB_TNSModel.MenuItems" Role="MenuItems" Multiplicity="1" />
@@ -599,118 +509,108 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <Association Name="FK_Contracts_Equips">
+          <End Type="DB_TNSModel.Equips" Role="Equips" Multiplicity="1" />
+          <End Type="DB_TNSModel.Contracts" Role="Contracts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Equips">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contracts">
+              <PropertyRef Name="ConnectedEquipId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contracts_ReasonsForTermination1">
+          <End Type="DB_TNSModel.ReasonsForTermination" Role="ReasonsForTermination" Multiplicity="0..1" />
+          <End Type="DB_TNSModel.Contracts" Role="Contracts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ReasonsForTermination">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contracts">
+              <PropertyRef Name="ReasonForTerminationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contracts_TypesContract">
+          <End Type="DB_TNSModel.TypesContract" Role="TypesContract" Multiplicity="1" />
+          <End Type="DB_TNSModel.Contracts" Role="Contracts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypesContract">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contracts">
+              <PropertyRef Name="TypeContractId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ServicesInContract_Contracts">
+          <End Type="DB_TNSModel.Contracts" Role="Contracts" Multiplicity="1" />
+          <End Type="DB_TNSModel.ServicesInContract" Role="ServicesInContract" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contracts">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ServicesInContract">
+              <PropertyRef Name="ContractNumberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subscribers_Contracts">
+          <End Type="DB_TNSModel.Contracts" Role="Contracts" Multiplicity="0..1" />
+          <End Type="DB_TNSModel.Subscribers" Role="Subscribers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contracts">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Subscribers">
+              <PropertyRef Name="ContractId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_RolesEmployees">
+          <End Type="DB_TNSModel.RolesEmployees" Role="RolesEmployees" Multiplicity="1" />
+          <End Type="DB_TNSModel.Employees" Role="Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RolesEmployees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subscribers_Genders">
+          <End Type="DB_TNSModel.Genders" Role="Genders" Multiplicity="1" />
+          <End Type="DB_TNSModel.Subscribers" Role="Subscribers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Genders">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Subscribers">
+              <PropertyRef Name="IdGender" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ServicesInContract_Services">
+          <End Type="DB_TNSModel.Services" Role="Services" Multiplicity="1" />
+          <End Type="DB_TNSModel.ServicesInContract" Role="ServicesInContract" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Services">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ServicesInContract">
+              <PropertyRef Name="TypeServicesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="Хранилище DB_TNSModelContainer" CdmEntityContainer="DB_TNSEntities">
-          <EntitySetMapping Name="Contracts">
-            <EntityTypeMapping TypeName="DB_TNSModel.Contracts">
-              <MappingFragment StoreEntitySet="Contracts">
-                <ScalarProperty Name="ContractNumber" ColumnName="ContractNumber" />
-                <ScalarProperty Name="NumberSubscriber" ColumnName="NumberSubscriber" />
-                <ScalarProperty Name="DateOfCinclusion" ColumnName="DateOfCinclusion" />
-                <ScalarProperty Name="TypeContractId" ColumnName="TypeContractId" />
-                <ScalarProperty Name="PersonalAccount" ColumnName="PersonalAccount" />
-                <ScalarProperty Name="ConnectedEquipId" ColumnName="ConnectedEquipId" />
-                <ScalarProperty Name="ReasonForTerminationID" ColumnName="ReasonForTerminationID" />
-                <ScalarProperty Name="TerminationDate" ColumnName="TerminationDate" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Employees">
-            <EntityTypeMapping TypeName="DB_TNSModel.Employees">
-              <MappingFragment StoreEntitySet="Employees">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Surname" ColumnName="Surname" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
-                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
-                <ScalarProperty Name="Number" ColumnName="Number" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Equips">
-            <EntityTypeMapping TypeName="DB_TNSModel.Equips">
-              <MappingFragment StoreEntitySet="Equips">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="EquipSerialNumber__EquipSerialNumber__EquipSerialNumber" ColumnName="EquipSerialNumber&#xD;&#xA;EquipSerialNumber&#xD;&#xA;EquipSerialNumber" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Genders">
-            <EntityTypeMapping TypeName="DB_TNSModel.Genders">
-              <MappingFragment StoreEntitySet="Genders">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Gender" ColumnName="Gender" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ReasonsForTermination">
-            <EntityTypeMapping TypeName="DB_TNSModel.ReasonsForTermination">
-              <MappingFragment StoreEntitySet="ReasonsForTermination">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="NameReasonTermination" ColumnName="NameReasonTermination" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="RolesEmployees">
-            <EntityTypeMapping TypeName="DB_TNSModel.RolesEmployees">
-              <MappingFragment StoreEntitySet="RolesEmployees">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="NameRole" ColumnName="NameRole" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Services">
-            <EntityTypeMapping TypeName="DB_TNSModel.Services">
-              <MappingFragment StoreEntitySet="Services">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="NameService" ColumnName="NameService" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ServicesInContract">
-            <EntityTypeMapping TypeName="DB_TNSModel.ServicesInContract">
-              <MappingFragment StoreEntitySet="ServicesInContract">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ContractNumberId" ColumnName="ContractNumberId" />
-                <ScalarProperty Name="TypeServicesId" ColumnName="TypeServicesId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Subscribers">
-            <EntityTypeMapping TypeName="DB_TNSModel.Subscribers">
-              <MappingFragment StoreEntitySet="Subscribers">
-                <ScalarProperty Name="NumberSubscriber" ColumnName="NumberSubscriber" />
-                <ScalarProperty Name="Surname" ColumnName="Surname" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
-                <ScalarProperty Name="IdGender" ColumnName="IdGender" />
-                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
-                <ScalarProperty Name="Telephone" ColumnName="Telephone" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="ResidenceAddress" ColumnName="ResidenceAddress" />
-                <ScalarProperty Name="ResidentialAddress" ColumnName="ResidentialAddress" />
-                <ScalarProperty Name="PassportSeries" ColumnName="PassportSeries" />
-                <ScalarProperty Name="PassportNumber" ColumnName="PassportNumber" />
-                <ScalarProperty Name="Unit_Code" ColumnName="Unit_Code" />
-                <ScalarProperty Name="ByWhomIssued" ColumnName="ByWhomIssued" />
-                <ScalarProperty Name="DateOfIssue" ColumnName="DateOfIssue" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="TypesContract">
-            <EntityTypeMapping TypeName="DB_TNSModel.TypesContract">
-              <MappingFragment StoreEntitySet="TypesContract">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="TypeContract" ColumnName="TypeContract" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="AccesToMenuItems">
             <EntityTypeMapping TypeName="DB_TNSModel.AccesToMenuItems">
               <MappingFragment StoreEntitySet="AccesToMenuItems">
@@ -720,10 +620,119 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Contracts">
+            <EntityTypeMapping TypeName="DB_TNSModel.Contracts">
+              <MappingFragment StoreEntitySet="Contracts">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="TerminationDate" ColumnName="TerminationDate" />
+                <ScalarProperty Name="ReasonForTerminationID" ColumnName="ReasonForTerminationID" />
+                <ScalarProperty Name="ConnectedEquipId" ColumnName="ConnectedEquipId" />
+                <ScalarProperty Name="PersonalAccount" ColumnName="PersonalAccount" />
+                <ScalarProperty Name="TypeContractId" ColumnName="TypeContractId" />
+                <ScalarProperty Name="DateOfCinclusion" ColumnName="DateOfCinclusion" />
+                <ScalarProperty Name="IdSubscriber" ColumnName="IdSubscriber" />
+                <ScalarProperty Name="ContractNumber" ColumnName="ContractNumber" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="DB_TNSModel.Employees">
+              <MappingFragment StoreEntitySet="Employees">
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Equips">
+            <EntityTypeMapping TypeName="DB_TNSModel.Equips">
+              <MappingFragment StoreEntitySet="Equips">
+                <ScalarProperty Name="EquipSerialNumber__EquipSerialNumber__EquipSerialNumber" ColumnName="EquipSerialNumber&#xD;&#xA;EquipSerialNumber&#xD;&#xA;EquipSerialNumber" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Genders">
+            <EntityTypeMapping TypeName="DB_TNSModel.Genders">
+              <MappingFragment StoreEntitySet="Genders">
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="MenuItems">
             <EntityTypeMapping TypeName="DB_TNSModel.MenuItems">
               <MappingFragment StoreEntitySet="MenuItems">
                 <ScalarProperty Name="Items" ColumnName="Items" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReasonsForTermination">
+            <EntityTypeMapping TypeName="DB_TNSModel.ReasonsForTermination">
+              <MappingFragment StoreEntitySet="ReasonsForTermination">
+                <ScalarProperty Name="NameReasonTermination" ColumnName="NameReasonTermination" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RolesEmployees">
+            <EntityTypeMapping TypeName="DB_TNSModel.RolesEmployees">
+              <MappingFragment StoreEntitySet="RolesEmployees">
+                <ScalarProperty Name="NameRole" ColumnName="NameRole" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Services">
+            <EntityTypeMapping TypeName="DB_TNSModel.Services">
+              <MappingFragment StoreEntitySet="Services">
+                <ScalarProperty Name="NameService" ColumnName="NameService" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ServicesInContract">
+            <EntityTypeMapping TypeName="DB_TNSModel.ServicesInContract">
+              <MappingFragment StoreEntitySet="ServicesInContract">
+                <ScalarProperty Name="TypeServicesId" ColumnName="TypeServicesId" />
+                <ScalarProperty Name="ContractNumberId" ColumnName="ContractNumberId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subscribers">
+            <EntityTypeMapping TypeName="DB_TNSModel.Subscribers">
+              <MappingFragment StoreEntitySet="Subscribers">
+                <ScalarProperty Name="ContractId" ColumnName="ContractId" />
+                <ScalarProperty Name="DateOfIssue" ColumnName="DateOfIssue" />
+                <ScalarProperty Name="ByWhomIssued" ColumnName="ByWhomIssued" />
+                <ScalarProperty Name="Unit_Code" ColumnName="Unit_Code" />
+                <ScalarProperty Name="PassportNumber" ColumnName="PassportNumber" />
+                <ScalarProperty Name="PassportSeries" ColumnName="PassportSeries" />
+                <ScalarProperty Name="ResidentialAddress" ColumnName="ResidentialAddress" />
+                <ScalarProperty Name="ResidenceAddress" ColumnName="ResidenceAddress" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="IdGender" ColumnName="IdGender" />
+                <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="NumberSubscriber" ColumnName="NumberSubscriber" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TypesContract">
+            <EntityTypeMapping TypeName="DB_TNSModel.TypesContract">
+              <MappingFragment StoreEntitySet="TypesContract">
+                <ScalarProperty Name="TypeContract" ColumnName="TypeContract" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

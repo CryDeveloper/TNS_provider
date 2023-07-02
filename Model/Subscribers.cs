@@ -14,12 +14,7 @@ namespace TNS__provider_.Model
     
     public partial class Subscribers
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Subscribers()
-        {
-            this.Contracts = new HashSet<Contracts>();
-        }
-    
+        public int Id { get; set; }
         public string NumberSubscriber { get; set; }
         public string Surname { get; set; }
         public string Name { get; set; }
@@ -35,9 +30,9 @@ namespace TNS__provider_.Model
         public string Unit_Code { get; set; }
         public string ByWhomIssued { get; set; }
         public System.DateTime DateOfIssue { get; set; }
+        public Nullable<int> ContractId { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Contracts> Contracts { get; set; }
+        public virtual Contracts Contracts { get; set; }
         public virtual Genders Genders { get; set; }
     }
 }

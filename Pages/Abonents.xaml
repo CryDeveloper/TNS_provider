@@ -67,11 +67,11 @@
         </Grid>
         <DataGrid Name="dgSubscribers" Grid.Row="1" Margin="10" FontSize="18" AutoGenerateColumns="False" CanUserAddRows="False" MouseDoubleClick="dgSubscribers_MouseDoubleClick">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Номер" Binding="{Binding SubscriberNomer}" Width="1*"></DataGridTextColumn>
+                <DataGridTextColumn Header="Номер" Binding="{Binding NumberSubscriber}" Width="1*"></DataGridTextColumn>
                 <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}" Width="2*"></DataGridTextColumn>
                 <DataGridTextColumn Header="Номер договора" Binding="{Binding Contracts.ContractNumber}" Width="2*"></DataGridTextColumn>
                 <DataGridTextColumn Header="ЛС" Binding="{Binding  Contracts.PersonalAccount}" Width="1*"></DataGridTextColumn>
-                <DataGridTextColumn Header="Услуги" Binding="{Binding  Uslugi}" Width="2*"></DataGridTextColumn>
+                <DataGridTextColumn Header="Услуги" Binding="{Binding Contracts.ListServices}" Width="2*"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
         <Grid Grid.Row="2">

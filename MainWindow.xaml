@@ -57,7 +57,7 @@
                        DockPanel.Dock="Right"
                        Source="/Resource/ID1516.jpg"/>-->
                 <ComboBox Name="cbUser" DockPanel.Dock="Right" VerticalAlignment="Center" Width="175" 
-                          DisplayMemberPath="FulName" SelectionChanged="cbUser_SelectionChanged"/>
+                          DisplayMemberPath="FullName" SelectionChanged="cbUser_SelectionChanged"/>
             </DockPanel>
             <Frame x:Name="MainWindowFrame" NavigationUIVisibility="Hidden" Grid.Row="1"/>
         </Grid>

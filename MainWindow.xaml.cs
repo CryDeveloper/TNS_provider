@@ -114,6 +114,14 @@ namespace TNS__provider_
             var acces = GlobalData.ConnectDB.AccesToMenuItems.Where(x => x.RoleId == employee.RoleId).ToList();
             List<Button> collectionBtn = BigMenu.Children.OfType<Button>().ToList();
             List<Image> collectionImg = LittleMenu.Children.OfType<Image>().ToList();
+            foreach (Button item in collectionBtn)
+            {
+                item.Visibility = Visibility.Collapsed;
+            }
+            for (int i = 1; i < collectionImg.Count; i++)
+            {
+                collectionImg[i].Visibility = Visibility.Collapsed;
+            }
             var a = collectionImg[0].Source.ToString().Contains("Лого");
             foreach (var item in acces)
             {

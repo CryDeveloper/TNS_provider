@@ -15,7 +15,7 @@ namespace TNS__provider_.Model
     public partial class ServicesInContract
     {
         public int Id { get; set; }
-        public string ContractNumberId { get; set; }
+        public int ContractNumberId { get; set; }
         public int TypeServicesId { get; set; }
     
         public virtual Contracts Contracts { get; set; }

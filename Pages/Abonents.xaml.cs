@@ -27,7 +27,15 @@ namespace TNS__provider_.Pages
         public Abonents()
         {
             InitializeComponent();
-            b = true;
+            dgSubscribers.ItemsSource = GlobalData.ConnectDB.Subscribers.ToList();
+            cbActive.IsChecked = true;
+
+            var a = GlobalData.ConnectDB.Contracts.ToList()[0];
+            var b = GlobalData.ConnectDB.Subscribers.ToList()[0];
+            var a1 = GlobalData.ConnectDB.Contracts.Where(x => x.IdSubscriber == b.Id).ToList();
+
+
+
         }
 
         void Filter()
@@ -40,11 +48,11 @@ namespace TNS__provider_.Pages
             }
             else if ((bool)cbActive.IsChecked && (bool)!cbNoActive.IsChecked)
             {
-                subscribers = GlobalData.ConnectDB.Subscribers.Where(x => x.Contracts.TerminationDate == null).ToList();
+                subscribers = GlobalData.ConnectDB.Subscribers.Where(x => x.Contracts/*.FirstOrDefault(y => x.NumberSubscriber == x.NumberSubscriber)*/.TerminationDate == null).ToList();
             }
             else if ((bool)!cbActive.IsChecked && (bool)cbNoActive.IsChecked)
             {
-                subscribers = GlobalData.ConnectDB.Subscribers.Where(x => x.Contracts.TerminationDate != null).ToList();
+                subscribers = GlobalData.ConnectDB.Subscribers.Where(x => x.Contracts/*.FirstOrDefault(y => x.NumberSubscriber == x.NumberSubscriber)*/.TerminationDate != null).ToList();
             }
             else
             {
@@ -52,7 +60,7 @@ namespace TNS__provider_.Pages
             }
 
             dgSubscribers.ItemsSource = subscribers;
-            if (subscribers.Count == 0 && b)
+            if (subscribers.Count == 0)
             {
                 MessageBox.Show("Отсутствуют требования, удовлетворяющие результатам поиска");
             }
@@ -75,22 +83,20 @@ namespace TNS__provider_.Pages
             }
         }
 
-        private void tbSearchPersonalAccount_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            if (!(Char.IsDigit(e.Text, 0)))
-            {
-                e.Handled = true;
-            }
-        }
+        //private void tbSearchPersonalAccount_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        //{
+        //    if (!(Char.IsDigit(e.Text, 0)))
+        //    {
+        //        e.Handled = true;
+        //    }
+        //}
         private void cbActive_Click(object sender, RoutedEventArgs e)
         {
-            b = true;
             Filter();
         }
 
         private void tbSearchSurname_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            b = true;
             Filter();
         }
 

@@ -25,17 +25,17 @@ namespace TNS__provider_.Model
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<AccesToMenuItems> AccesToMenuItems { get; set; }
         public virtual DbSet<Contracts> Contracts { get; set; }
         public virtual DbSet<Employees> Employees { get; set; }
         public virtual DbSet<Equips> Equips { get; set; }
         public virtual DbSet<Genders> Genders { get; set; }
+        public virtual DbSet<MenuItems> MenuItems { get; set; }
         public virtual DbSet<ReasonsForTermination> ReasonsForTermination { get; set; }
         public virtual DbSet<RolesEmployees> RolesEmployees { get; set; }
         public virtual DbSet<Services> Services { get; set; }
         public virtual DbSet<ServicesInContract> ServicesInContract { get; set; }
         public virtual DbSet<Subscribers> Subscribers { get; set; }
         public virtual DbSet<TypesContract> TypesContract { get; set; }
-        public virtual DbSet<AccesToMenuItems> AccesToMenuItems { get; set; }
-        public virtual DbSet<MenuItems> MenuItems { get; set; }
     }
 }
